@@ -1,0 +1,31 @@
+- name: Install snmpd package
+  apt:
+    name: snmpd
+    state: latest
+    install_recommends: yes
+    update_cache: yes
+
+- name: Copy snmpd.conf
+  template:
+    src: snmpd.conf.j2
+    dest: /etc/snmp/snmpd.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: __DOWNLOAD SNMP DISTRO SCRIPT__
+  shell: "curl https://raw.githubusercontent.com/librenms/librenms-agent/master/snmp/distro -o /usr/bin/distro"
+
+- name: __DOWNLOAD SNMP OSUPDATES SCRIPT__
+  shell: "wget https://raw.githubusercontent.com/librenms/librenms-agent/master/snmp/osupdate -O /etc/snmp/osupdate"
+
+- name: __SET PERMISSIONS ON DISTRO SCRIPT__
+  shell: "chmod +x /usr/bin/distro"
+
+- name: __SET PERMISSIONS ON OSUPDATES SCRIPT__
+  shell: "chmod +x /etc/snmp/osupdate"
+
+- name: __RESTART SNMPD TO APPLY CHANGES__
+  service:
+    name: snmpd
+    state: restarted

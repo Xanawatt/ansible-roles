@@ -1,0 +1,13 @@
+- name: "Run prestep: update local state"
+  import_playbook: update-local-state.yml
+
+- name: Configure dn42 routers
+  hosts: routers:private
+  become: yes
+  roles:
+    - role: config-iptables
+      when: "auto_iptables|default(True)"
+    - role: config-loopback
+      dummy_iface: "{{ dummy_interfaces.igp }}"
+      when: "'igp' in dummy_interfaces"
+    - config-wireguard

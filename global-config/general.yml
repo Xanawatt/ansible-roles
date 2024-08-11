@@ -1,0 +1,34 @@
+ownas: "4242422314"
+ownnet:
+- 172.22.179.96/27
+ownnet6:
+- fd0b:4d5d:38d9::/48
+
+# Default ratelimit (Mbps) for outgoing traffic on dn42 interfaces
+#dn42_ratelimit: 15
+
+loopback_interfaces:
+  kitauji_igp:
+    ifname: "loopback24"
+    ip4: ["{{ ownip }}"]
+    ip6: ["{{ ownip6 }}"]
+    track_service: no
+  dn42_igp:
+    ifname: "loopback42"
+    ip4: ["{{ ownip }}"]
+    ip6: ["{{ ownip6 }}"]
+    track_service: yes
+
+# Interfaces to clean up (e.g. for decommissioned nodes)
+cleanup_remove_ifaces: []
+
+# DNS related settings
+# This is the main domain used for creating host records for routers (<shortname>.<dns_domain>).
+# Other domains can be specified in global-config/dns-entries.yml
+dns_domain: "tcom.kitauji.dn42"
+# Suffix to use when automatically creating host records for routers: i.e. "<name><suffix>.<dns_domain>". Include a leading dot but no trailing dot
+dns_auto_host_record_suffix: ".rtr"
+dns_nameserver: "ns.highdef.dn42"  # used in NS, SOA records; substitutions not supported here
+dns_ttl: 300
+dns_zones_dir: "/etc/powerdns/dns-zones"
+

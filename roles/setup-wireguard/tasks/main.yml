@@ -1,0 +1,22 @@
+- name: Prepare Wireguard keys
+  block:
+  - name: Make sure /etc/wireguard exists
+    file:
+      path: "/etc/wireguard"
+      state: directory
+      mode: '0700'
+  - name: Generate Wireguard private key
+    shell: "wg genkey > /etc/wireguard/privatekey"
+    args:
+      creates: "/etc/wireguard/privatekey"
+  - name: "Secure Wireguard private key"
+    file:
+      path: "/etc/wireguard/privatekey"
+      mode: '0640'
+      owner: root
+      group: root
+    ignore_errors: "{{ ansible_check_mode }}"
+  - name: Generate Wireguard public key
+    shell: "wg pubkey < /etc/wireguard/privatekey > /etc/wireguard/publickey"
+    args:
+      creates: "/etc/wireguard/publickey"

@@ -1,0 +1,11 @@
+rocommunity kitauji default
+com2sec readonly  default         kitauji
+group MyROGroup v2c        readonly
+view all    included  .1                               80
+access MyROGroup ""      any       noauth    exact  all    none   none
+sysLocation    {{ sysLocation }}
+sysContact     Xanawatt <xanawatt@kitauji.net>
+master  agentx
+agentxperms 0770 0770 root snmp # if you intend to run this as an unprivileged user
+extend distro /usr/bin/distro
+extend osupdate /etc/snmp/osupdate

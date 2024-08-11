@@ -1,0 +1,5 @@
+- name: Configure snmpd on routers
+  hosts: routers
+  become: yes
+  roles:
+    - role: setup-snmpd

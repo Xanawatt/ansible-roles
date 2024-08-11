@@ -1,0 +1,29 @@
+- name: Add bird stable repository
+  ansible.builtin.apt_repository:
+    repo: ppa:cz.nic-labs/bird
+
+- name: Install bird package
+  apt:
+    name: bird2
+    state: latest
+    install_recommends: yes
+    update_cache: yes
+
+- name: Apply Bird service overrides
+  block:
+  - name: Create Bird service.d directory
+    file:
+      path: /etc/systemd/system/bird.service.d/
+      state: directory
+      owner: root
+      group: root
+      mode: 0755
+
+  - name: Copy bird.service drop-in
+    template:
+      src: bird.service-override.conf.j2
+      dest: /etc/systemd/system/bird.service.d/override.conf
+      owner: root
+      group: root
+      mode: 0644
+    notify: Restart Bird
